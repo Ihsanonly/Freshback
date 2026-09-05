@@ -1,0 +1,19 @@
+CREATE DATABASE IF NOT EXISTS freshback
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+USE freshback;
+
+CREATE TABLE IF NOT EXISTS foods (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  quantity VARCHAR(50) NOT NULL,
+  purchase_date DATE NOT NULL,
+  shelf_life_days INT UNSIGNED NOT NULL,
+  category VARCHAR(50) DEFAULT NULL,
+  notes TEXT DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_purchase_date (purchase_date),
+  INDEX idx_category (category)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
