@@ -97,3 +97,18 @@ View ada di:
 ```text
 resources/views/foods/index.blade.php
 ```
+
+## Tambah Makanan
+
+Route form tambah makanan:
+
+```text
+http://127.0.0.1:8000/foods/create
+```
+
+Alurnya:
+
+```text
+Browser -> /foods/create -> FoodController@create -> create.blade.php
+Form Submit -> POST /foods -> FoodController@store -> Food Model -> Database
+```

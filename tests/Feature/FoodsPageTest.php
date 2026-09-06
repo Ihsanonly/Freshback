@@ -53,6 +53,7 @@ class FoodsPageTest extends TestCase
         $response->assertOk();
         $response->assertSee('FRESHBACK');
         $response->assertSee('Daftar Makanan');
+        $response->assertSee('+ Tambah Makanan');
         $response->assertSee('Nama');
         $response->assertSee('Jumlah');
         $response->assertSee('Dibeli');

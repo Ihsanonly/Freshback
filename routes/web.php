@@ -9,6 +9,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/foods/create', [FoodController::class, 'create'])->name('foods.create');
+Route::post('/foods', [FoodController::class, 'store'])->name('foods.store');
 Route::get('/foods', [FoodController::class, 'index'])->name('foods.index');
 
 Route::get('/test-db', function () {

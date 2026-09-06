@@ -123,6 +123,47 @@
             margin: 0 0 14px;
         }
 
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 40px;
+            padding: 0 16px;
+            border: 1px solid #86c79a;
+            border-radius: 8px;
+            background: #dcfce7;
+            color: #166534;
+            box-shadow: 0 8px 18px rgba(22, 101, 52, 0.08);
+        }
+
+        .button:hover {
+            text-decoration: none;
+            background: #bbf7d0;
+        }
+
+        .text-link {
+            min-height: 40px;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .alert {
+            margin-bottom: 14px;
+            padding: 12px 14px;
+            border: 1px solid #86c79a;
+            border-radius: 8px;
+            background: #dcfce7;
+            color: #166534;
+            font-weight: 700;
+        }
+
         .panel {
             overflow-x: auto;
             border: 1px solid #dcebe2;
@@ -204,6 +245,10 @@
                 margin-top: 12px;
             }
 
+            .actions {
+                justify-content: flex-start;
+            }
+
             table {
                 min-width: 760px;
             }
@@ -227,10 +272,17 @@
                     <h1>Daftar Makanan</h1>
                     <p class="muted">Total data: {{ $foods->count() }}</p>
                 </div>
-                <a href="{{ url('/test-db') }}">Tes koneksi database</a>
+                <div class="actions">
+                    <a class="button" href="{{ route('foods.create') }}">+ Tambah Makanan</a>
+                    <a class="text-link" href="{{ url('/test-db') }}">Tes koneksi database</a>
+                </div>
             </header>
 
             <hr class="divider">
+
+            @if (session('success'))
+                <p class="alert">{{ session('success') }}</p>
+            @endif
 
             <section class="panel">
                 @if ($foods->isEmpty())
