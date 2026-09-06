@@ -26,7 +26,7 @@
         }
 
         .page {
-            width: min(1040px, 100%);
+            width: min(1220px, 100%);
             box-sizing: border-box;
             margin: 0 auto;
             padding: 32px;
@@ -182,6 +182,7 @@
 
         table {
             width: 100%;
+            min-width: 1080px;
             border-collapse: collapse;
             table-layout: fixed;
             font-family: Consolas, "Courier New", monospace;
@@ -210,43 +211,45 @@
 
         th:nth-child(1),
         td:nth-child(1) {
-            width: 138px;
+            width: 160px;
         }
 
         th:nth-child(2),
         td:nth-child(2) {
-            width: 80px;
+            width: 92px;
         }
 
         th:nth-child(3),
         td:nth-child(3) {
-            width: 96px;
+            width: 110px;
         }
 
         th:nth-child(4),
         td:nth-child(4) {
-            width: 116px;
+            width: 130px;
         }
 
         th:nth-child(5),
         td:nth-child(5) {
-            width: 128px;
+            width: 150px;
         }
 
         th:nth-child(6),
         td:nth-child(6) {
-            min-width: 180px;
+            width: 260px;
         }
 
         th:nth-child(7),
         td:nth-child(7) {
-            width: 160px;
+            width: 126px;
+            padding-right: 12px;
         }
 
         .row-actions {
             display: flex;
             gap: 8px;
             align-items: center;
+            min-width: 106px;
         }
 
         .action-link,
@@ -254,19 +257,21 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            min-height: 32px;
-            padding: 0 10px;
+            width: 46px;
+            min-width: 46px;
+            min-height: 38px;
+            padding: 0;
             border-radius: 8px;
             font-family: Arial, sans-serif;
-            font-size: 13px;
+            font-size: 18px;
             font-weight: 700;
             transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
         }
 
         .action-link {
-            border: 1px solid #86c79a;
-            background: #dcfce7;
-            color: #166534;
+            border: 1px solid #67e8f9;
+            background: #cffafe;
+            color: #0e7490;
         }
 
         .action-button {
@@ -280,7 +285,32 @@
         .action-button:hover {
             text-decoration: none;
             transform: translateY(-1px);
-            box-shadow: 0 8px 16px rgba(22, 101, 52, 0.10);
+            box-shadow: 0 8px 16px rgba(14, 116, 144, 0.12);
+        }
+
+        .action-link:hover {
+            background: #a5f3fc;
+        }
+
+        .note-cell {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 260px;
+        }
+
+        /* TAMBAHAN: Sticky action column agar selalu tampil di kanan */
+        th.sticky-action,
+        td.sticky-action {
+            position: sticky;
+            right: 0;
+            z-index: 10;
+            box-shadow: -3px 0 6px rgba(22, 101, 52, 0.08);
+        }
+        th.sticky-action {
+            background: #eef7f0;
+        }
+        td.sticky-action {
+            background: #ffffff;
         }
 
         .empty {
@@ -376,7 +406,7 @@
             }
 
             table {
-                min-width: 940px;
+                min-width: 1080px;
             }
         }
     </style>
@@ -423,7 +453,7 @@
                                 <th>Masa Simpan</th>
                                 <th>Kategori</th>
                                 <th>Catatan</th>
-                                <th>Aksi</th>
+                                <th class="sticky-action">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -434,17 +464,24 @@
                                     <td>{{ $food->purchase_date?->format('d/m/y') }}</td>
                                     <td>{{ $food->shelf_life_days }} hari</td>
                                     <td>{{ $food->category ?: '-' }}</td>
-                                    <td>{{ $food->notes ?: '-' }}</td>
-                                    <td>
+                                    <td class="note-cell" title="{{ $food->notes }}">{{ $food->notes ?: '-' }}</td>
+                                    <td class="sticky-action">
                                         <div class="row-actions">
-                                            <a class="action-link" href="{{ route('foods.edit', $food) }}">Edit</a>
+                                            <a
+                                                class="action-link"
+                                                href="{{ route('foods.edit', $food) }}"
+                                                title="Edit"
+                                                aria-label="Edit {{ $food->name }}"
+                                            >📝</a>
                                             <button
                                                 class="action-button"
                                                 type="button"
+                                                title="Hapus"
+                                                aria-label="Hapus {{ $food->name }}"
                                                 data-delete-action="{{ route('foods.destroy', $food) }}"
                                                 data-delete-name="{{ $food->name }}"
                                             >
-                                                Hapus
+                                                🗑️
                                             </button>
                                         </div>
                                     </td>
@@ -519,4 +556,4 @@
         });
     </script>
 </body>
-</html>
+</html> 
