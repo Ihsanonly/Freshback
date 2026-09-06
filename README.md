@@ -112,3 +112,19 @@ Alurnya:
 Browser -> /foods/create -> FoodController@create -> create.blade.php
 Form Submit -> POST /foods -> FoodController@store -> Food Model -> Database
 ```
+
+## Edit Dan Hapus Makanan
+
+Route edit makanan:
+
+```text
+http://127.0.0.1:8000/foods/{id}/edit
+```
+
+Alurnya:
+
+```text
+Klik Edit -> FoodController@edit -> edit.blade.php
+Simpan Perubahan -> PUT /foods/{id} -> FoodController@update -> Food Model -> Database
+Klik Hapus -> Konfirmasi -> DELETE /foods/{id} -> FoodController@destroy -> Database
+```

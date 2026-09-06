@@ -60,6 +60,9 @@ class FoodsPageTest extends TestCase
         $response->assertSee('Masa Simpan');
         $response->assertSee('Kategori');
         $response->assertSee('Catatan');
+        $response->assertSee('Aksi');
+        $response->assertSee('Edit');
+        $response->assertSee('Hapus');
         $response->assertSee('Total data: 4');
         $response->assertSee('Tes koneksi database');
         $response->assertSeeInOrder(['Telur', '05/09/26', 'Milo', '04/09/26', 'Roti', '03/09/26', 'Susu', '02/09/26']);

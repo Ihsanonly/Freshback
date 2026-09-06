@@ -24,21 +24,48 @@ class FoodController extends Controller
     public function create(): View
     {
         return view('foods.create', [
-            'categories' => [
-                'Protein',
-                'Karbohidrat',
-                'Sayur',
-                'Buah',
-                'Minuman',
-                'Dairy',
-                'Lainnya',
-            ],
+            'categories' => $this->categories(),
         ]);
     }
 
     public function store(Request $request): RedirectResponse
     {
-        $validated = $request->validate([
+        Food::create($this->validatedFoodData($request));
+
+        return redirect()
+            ->route('foods.index')
+            ->with('success', 'Makanan berhasil ditambahkan.');
+    }
+
+    public function edit(Food $food): View
+    {
+        return view('foods.edit', [
+            'food' => $food,
+            'categories' => $this->categories(),
+        ]);
+    }
+
+    public function update(Request $request, Food $food): RedirectResponse
+    {
+        $food->update($this->validatedFoodData($request));
+
+        return redirect()
+            ->route('foods.index')
+            ->with('success', 'Makanan berhasil diperbarui.');
+    }
+
+    public function destroy(Food $food): RedirectResponse
+    {
+        $food->delete();
+
+        return redirect()
+            ->route('foods.index')
+            ->with('success', 'Makanan berhasil dihapus.');
+    }
+
+    private function validatedFoodData(Request $request): array
+    {
+        return $request->validate([
             'name' => ['required', 'string', 'max:100'],
             'quantity' => ['required', 'string', 'max:50'],
             'purchase_date' => ['required', 'date'],
@@ -55,11 +82,18 @@ class FoodController extends Controller
             'shelf_life_days.min' => 'Masa simpan minimal 1 hari.',
             'category.required' => 'Kategori wajib dipilih.',
         ]);
+    }
 
-        Food::create($validated);
-
-        return redirect()
-            ->route('foods.index')
-            ->with('success', 'Makanan berhasil ditambahkan.');
+    private function categories(): array
+    {
+        return [
+            'Protein',
+            'Karbohidrat',
+            'Sayur',
+            'Buah',
+            'Minuman',
+            'Dairy',
+            'Lainnya',
+        ];
     }
 }

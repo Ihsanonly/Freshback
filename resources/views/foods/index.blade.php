@@ -148,6 +148,16 @@
             background: #bbf7d0;
         }
 
+        .button.danger {
+            border-color: #fecaca;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .button.danger:hover {
+            background: #fecaca;
+        }
+
         .text-link {
             min-height: 40px;
             display: inline-flex;
@@ -228,11 +238,127 @@
             min-width: 180px;
         }
 
+        th:nth-child(7),
+        td:nth-child(7) {
+            width: 160px;
+        }
+
+        .row-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .action-link,
+        .action-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 32px;
+            padding: 0 10px;
+            border-radius: 8px;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+        }
+
+        .action-link {
+            border: 1px solid #86c79a;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .action-button {
+            border: 1px solid #fecaca;
+            background: #fee2e2;
+            color: #991b1b;
+            cursor: pointer;
+        }
+
+        .action-link:hover,
+        .action-button:hover {
+            text-decoration: none;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 16px rgba(22, 101, 52, 0.10);
+        }
+
         .empty {
             font-family: Consolas, "Courier New", monospace;
             font-size: 14px;
             line-height: 1.6;
             color: #647067;
+        }
+
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            padding: 16px;
+            background: rgba(23, 35, 29, 0.38);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 180ms ease;
+        }
+
+        .modal-backdrop.is-open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal {
+            width: min(420px, 100%);
+            box-sizing: border-box;
+            padding: 24px;
+            background: #ffffff;
+            border: 1px solid #dcebe2;
+            border-radius: 12px;
+            box-shadow: 0 20px 46px rgba(23, 35, 29, 0.20);
+            transform: translateY(12px) scale(0.98);
+            transition: transform 180ms ease;
+        }
+
+        .modal-backdrop.is-open .modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal h2 {
+            margin: 0 0 8px;
+            color: #991b1b;
+            font-size: 20px;
+        }
+
+        .modal p {
+            color: #647067;
+            line-height: 1.5;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .modal-actions button {
+            min-height: 40px;
+            padding: 0 14px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .cancel-button {
+            border: 1px solid #b8d5c2;
+            background: #f6fbf8;
+            color: #166534;
+        }
+
+        .delete-submit {
+            border: 1px solid #dc2626;
+            background: #dc2626;
+            color: #ffffff;
         }
 
         @media (max-width: 640px) {
@@ -250,7 +376,7 @@
             }
 
             table {
-                min-width: 760px;
+                min-width: 940px;
             }
         }
     </style>
@@ -297,6 +423,7 @@
                                 <th>Masa Simpan</th>
                                 <th>Kategori</th>
                                 <th>Catatan</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -308,6 +435,19 @@
                                     <td>{{ $food->shelf_life_days }} hari</td>
                                     <td>{{ $food->category ?: '-' }}</td>
                                     <td>{{ $food->notes ?: '-' }}</td>
+                                    <td>
+                                        <div class="row-actions">
+                                            <a class="action-link" href="{{ route('foods.edit', $food) }}">Edit</a>
+                                            <button
+                                                class="action-button"
+                                                type="button"
+                                                data-delete-action="{{ route('foods.destroy', $food) }}"
+                                                data-delete-name="{{ $food->name }}"
+                                            >
+                                                Hapus
+                                            </button>
+                                        </div>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -316,5 +456,67 @@
             </section>
         </div>
     </main>
+
+    <div class="modal-backdrop" data-delete-modal hidden>
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="delete-title">
+            <h2 id="delete-title">Hapus makanan?</h2>
+            <p>
+                Data <strong data-delete-food-name>-</strong> akan dihapus dari database.
+                Aksi ini tidak bisa dibatalkan.
+            </p>
+
+            <form method="POST" data-delete-form>
+                @csrf
+                @method('DELETE')
+
+                <div class="modal-actions">
+                    <button class="cancel-button" type="button" data-close-delete>Batal</button>
+                    <button class="delete-submit" type="submit">Ya, hapus</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.querySelector('[data-delete-modal]');
+        const deleteForm = document.querySelector('[data-delete-form]');
+        const deleteFoodName = document.querySelector('[data-delete-food-name]');
+        const closeDeleteButton = document.querySelector('[data-close-delete]');
+
+        function openDeleteModal(button) {
+            deleteForm.action = button.dataset.deleteAction;
+            deleteFoodName.textContent = button.dataset.deleteName;
+            modal.hidden = false;
+            requestAnimationFrame(() => modal.classList.add('is-open'));
+        }
+
+        function closeDeleteModal() {
+            modal.classList.remove('is-open');
+
+            setTimeout(() => {
+                modal.hidden = true;
+                deleteForm.removeAttribute('action');
+                deleteFoodName.textContent = '-';
+            }, 180);
+        }
+
+        document.querySelectorAll('[data-delete-action]').forEach((button) => {
+            button.addEventListener('click', () => openDeleteModal(button));
+        });
+
+        closeDeleteButton.addEventListener('click', closeDeleteModal);
+
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                closeDeleteModal();
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && !modal.hidden) {
+                closeDeleteModal();
+            }
+        });
+    </script>
 </body>
 </html>
