@@ -40,7 +40,6 @@ class Food extends Model
     /**
      * Menghitung jumlah hari yang tersisa.
      *
-     * Hasil:
      * > 5  = masih aman
      * 3-5  = perlu dipantau
      * 0-2  = segera digunakan
@@ -96,5 +95,44 @@ class Food extends Model
             'Sudah Lewat Masa Simpan' => 'expired',
             default => 'unknown',
         };
+    }
+
+    /**
+     * Membuat insight/catatan otomatis berdasarkan kondisi makanan.
+     *
+     * Catatan ini tidak berasal dari input user.
+     */
+    public function getAutoNoteAttribute(): string
+    {
+        if ($this->days_remaining === null) {
+            return 'Lengkapi data makanan agar FRESHBACK dapat memberikan insight.';
+        }
+
+        if ($this->days_remaining < 0) {
+            $days = abs($this->days_remaining);
+
+            return "Masa simpan yang dicatat sudah terlewati {$days} hari. "
+                . "Periksa kondisi makanan sebelum memutuskan penggunaannya.";
+        }
+
+        if ($this->days_remaining === 0) {
+            return '⚠️ Batas masa simpan hari ini. Sebaiknya segera digunakan.';
+        }
+
+        if ($this->days_remaining === 1) {
+            return '🚨 Tinggal 1 hari lagi. Prioritaskan makanan ini untuk digunakan.';
+        }
+
+        if ($this->days_remaining === 2) {
+            return '⚠️ Tinggal 2 hari lagi. Mulai prioritaskan penggunaannya.';
+        }
+
+        if ($this->days_remaining <= 5) {
+            return "👀 Masih ada {$this->days_remaining} hari. "
+                . "Sebaiknya mulai dipantau dan direncanakan penggunaannya.";
+        }
+
+        return "✅ Masih ada {$this->days_remaining} hari. "
+            . "Belum menjadi prioritas untuk segera digunakan.";
     }
 }

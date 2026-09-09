@@ -3,7 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>Tambah Makanan - FRESHBACK</title>
+
     <style>
         html,
         body {
@@ -43,7 +45,6 @@
             margin-bottom: 34px;
             font-size: 14px;
             font-weight: 700;
-            letter-spacing: 0;
             color: #166534;
         }
 
@@ -151,8 +152,7 @@
         }
 
         input,
-        select,
-        textarea {
+        select {
             width: 100%;
             box-sizing: border-box;
             min-height: 44px;
@@ -163,17 +163,14 @@
             color: #17231d;
             font: 700 15px Consolas, "Courier New", monospace;
             outline: 0;
-            transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
-        }
-
-        textarea {
-            min-height: 96px;
-            resize: vertical;
+            transition:
+                border-color 180ms ease,
+                box-shadow 180ms ease,
+                transform 180ms ease;
         }
 
         input:focus,
-        select:focus,
-        textarea:focus {
+        select:focus {
             border-color: #22c55e;
             box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.14);
             transform: translateY(-1px);
@@ -214,7 +211,10 @@
             background: #166534;
             color: #ffffff;
             box-shadow: 0 12px 22px rgba(22, 101, 52, 0.18);
-            transition: background 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+            transition:
+                background 180ms ease,
+                transform 180ms ease,
+                box-shadow 180ms ease;
         }
 
         button:hover {
@@ -229,39 +229,43 @@
             background: #f6fbf8;
         }
 
-        .preview {
-            position: sticky;
-            top: 20px;
+        .auto-note {
             padding: 18px;
             border: 1px solid #dcebe2;
             border-radius: 12px;
             background: #f6fbf8;
         }
 
-        .preview h2 {
-            margin: 0 0 14px;
+        .auto-note h2 {
+            margin: 0 0 10px;
             font-size: 15px;
             color: #166534;
         }
 
-        .preview-list {
+        .auto-note p {
+            color: #647067;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .preview {
             display: grid;
             gap: 10px;
+            margin-top: 16px;
             font-family: Consolas, "Courier New", monospace;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .preview-item {
             display: flex;
             justify-content: space-between;
-            gap: 12px;
-            border-bottom: 1px dashed #b8d5c2;
+            gap: 10px;
             padding-bottom: 8px;
+            border-bottom: 1px dashed #b8d5c2;
         }
 
         .preview-item:last-child {
             border-bottom: 0;
-            padding-bottom: 0;
         }
 
         .preview-value {
@@ -291,125 +295,245 @@
             .form-shell {
                 grid-template-columns: 1fr;
             }
-
-            .preview {
-                position: static;
-            }
         }
     </style>
 </head>
+
 <body>
     <main>
         <div class="page">
+
             <div class="brand" aria-label="FRESHBACK">
                 <span class="brand-mark" aria-hidden="true">
                     <span></span>
                     <span></span>
                     <span></span>
                 </span>
+
                 <span>FRESHBACK</span>
             </div>
 
             <header>
                 <div>
                     <h1>Tambah Makanan</h1>
-                    <p class="muted">Catat bahan makanan baru ke database.</p>
+
+                    <p class="muted">
+                        Masukkan data dasar makanan. Insight dibuat otomatis oleh FRESHBACK.
+                    </p>
                 </div>
-                <a href="{{ route('foods.index') }}">Kembali ke daftar</a>
+
+                <a href="{{ route('foods.index') }}">
+                    Kembali ke daftar
+                </a>
             </header>
 
             <hr class="divider">
 
             <div class="form-shell">
-                <form method="POST" action="{{ route('foods.store') }}">
+
+                <form
+                    method="POST"
+                    action="{{ route('foods.store') }}"
+                >
                     @csrf
 
                     <div class="field form-row">
-                        <label for="name">Nama Makanan</label>
-                        <input id="name" name="name" type="text" value="{{ old('name') }}" autocomplete="off" autofocus>
+                        <label for="name">
+                            Nama Makanan
+                        </label>
+
+                        <input
+                            id="name"
+                            name="name"
+                            type="text"
+                            value="{{ old('name') }}"
+                            autocomplete="off"
+                            autofocus
+                        >
+
                         @error('name')
-                            <p class="error">{{ $message }}</p>
+                            <p class="error">
+                                {{ $message }}
+                            </p>
                         @enderror
                     </div>
 
                     <div class="field form-row">
-                        <label for="quantity">Jumlah</label>
-                        <input id="quantity" name="quantity" type="text" value="{{ old('quantity') }}" autocomplete="off">
+                        <label for="quantity">
+                            Jumlah
+                        </label>
+
+                        <input
+                            id="quantity"
+                            name="quantity"
+                            type="text"
+                            value="{{ old('quantity') }}"
+                            autocomplete="off"
+                        >
+
                         @error('quantity')
-                            <p class="error">{{ $message }}</p>
+                            <p class="error">
+                                {{ $message }}
+                            </p>
                         @enderror
                     </div>
 
                     <div class="field form-row">
-                        <label for="purchase_date">Tanggal Dibeli</label>
-                        <input id="purchase_date" name="purchase_date" type="date" value="{{ old('purchase_date') }}">
+                        <label for="purchase_date">
+                            Tanggal Dibeli
+                        </label>
+
+                        <input
+                            id="purchase_date"
+                            name="purchase_date"
+                            type="date"
+                            value="{{ old('purchase_date') }}"
+                        >
+
                         @error('purchase_date')
-                            <p class="error">{{ $message }}</p>
+                            <p class="error">
+                                {{ $message }}
+                            </p>
                         @enderror
                     </div>
 
                     <div class="field form-row">
-                        <label for="shelf_life_days">Masa Simpan</label>
-                        <input id="shelf_life_days" name="shelf_life_days" type="number" min="1" value="{{ old('shelf_life_days') }}">
+                        <label for="shelf_life_days">
+                            Masa Simpan
+                        </label>
+
+                        <input
+                            id="shelf_life_days"
+                            name="shelf_life_days"
+                            type="number"
+                            min="1"
+                            value="{{ old('shelf_life_days') }}"
+                        >
+
                         @error('shelf_life_days')
-                            <p class="error">{{ $message }}</p>
+                            <p class="error">
+                                {{ $message }}
+                            </p>
                         @enderror
                     </div>
 
                     <div class="field form-row">
-                        <label for="category">Kategori</label>
-                        <select id="category" name="category">
-                            <option value="">Pilih</option>
+                        <label for="category">
+                            Kategori
+                        </label>
+
+                        <select
+                            id="category"
+                            name="category"
+                        >
+                            <option value="">
+                                Pilih
+                            </option>
+
                             @foreach ($categories as $category)
-                                <option value="{{ $category }}" @selected(old('category') === $category)>{{ $category }}</option>
+                                <option
+                                    value="{{ $category }}"
+                                    @selected(old('category') === $category)
+                                >
+                                    {{ $category }}
+                                </option>
                             @endforeach
                         </select>
-                        @error('category')
-                            <p class="error">{{ $message }}</p>
-                        @enderror
-                    </div>
 
-                    <div class="field form-row">
-                        <label for="notes">Catatan</label>
-                        <textarea id="notes" name="notes">{{ old('notes') }}</textarea>
-                        @error('notes')
-                            <p class="error">{{ $message }}</p>
+                        @error('category')
+                            <p class="error">
+                                {{ $message }}
+                            </p>
                         @enderror
                     </div>
 
                     <div class="button-row form-row">
-                        <button type="submit">+ Simpan</button>
-                        <a class="button-link" href="{{ route('foods.index') }}">Batal</a>
+
+                        <button type="submit">
+                            + Simpan
+                        </button>
+
+                        <a
+                            class="button-link"
+                            href="{{ route('foods.index') }}"
+                        >
+                            Batal
+                        </a>
+
                     </div>
                 </form>
 
-                <aside class="preview" aria-label="Preview makanan">
-                    <h2>Preview</h2>
-                    <div class="preview-list">
+                <aside>
+
+                    <div class="auto-note">
+                        <h2>
+                            ✨ Insight Otomatis
+                        </h2>
+
+                        <p>
+                            Kamu tidak perlu menulis catatan.
+                            Setelah makanan disimpan, FRESHBACK akan menghitung
+                            masa simpan dan membuat insight secara otomatis.
+                        </p>
+                    </div>
+
+                    <div class="preview">
+
                         <div class="preview-item">
                             <span>Nama</span>
-                            <span class="preview-value" data-preview="name">-</span>
+
+                            <span
+                                class="preview-value"
+                                data-preview="name"
+                            >
+                                -
+                            </span>
                         </div>
+
                         <div class="preview-item">
                             <span>Jumlah</span>
-                            <span class="preview-value" data-preview="quantity">-</span>
+
+                            <span
+                                class="preview-value"
+                                data-preview="quantity"
+                            >
+                                -
+                            </span>
                         </div>
+
                         <div class="preview-item">
                             <span>Dibeli</span>
-                            <span class="preview-value" data-preview="purchase_date">-</span>
+
+                            <span
+                                class="preview-value"
+                                data-preview="purchase_date"
+                            >
+                                -
+                            </span>
                         </div>
+
                         <div class="preview-item">
                             <span>Kategori</span>
-                            <span class="preview-value" data-preview="category">-</span>
+
+                            <span
+                                class="preview-value"
+                                data-preview="category"
+                            >
+                                -
+                            </span>
                         </div>
+
                     </div>
+
                 </aside>
+
             </div>
         </div>
     </main>
 
     <script>
         const body = document.body;
+
         const fields = {
             name: document.querySelector('#name'),
             quantity: document.querySelector('#quantity'),
@@ -423,7 +547,10 @@
 
         function updatePreview() {
             Object.entries(fields).forEach(([key, field]) => {
-                const target = document.querySelector(`[data-preview="${key}"]`);
+                const target = document.querySelector(
+                    `[data-preview="${key}"]`
+                );
+
                 const value = field.value.trim();
 
                 target.textContent = value || '-';

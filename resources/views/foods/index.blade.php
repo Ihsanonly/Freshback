@@ -718,9 +718,9 @@
 
                                     <td
                                         class="note-cell"
-                                        title="{{ $food->notes }}"
+                                        title="{{ $food->auto_note }}"
                                     >
-                                        {{ $food->notes ?: '-' }}
+                                        {{ $food->auto_note ?: '-' }}
                                     </td>
 
                                     <td class="sticky-action">
