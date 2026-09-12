@@ -14,7 +14,46 @@ class FoodController extends Controller
         $foods = Food::query()
             ->orderByDesc('purchase_date')
             ->orderBy('name')
-            ->get();
+            ->get()
+            ->sort(function (Food $a, Food $b) {
+                /*
+                 * Priority:
+                 * 1 = paling penting
+                 * 2 = sedang
+                 * 3 = rendah
+                 * 0 = expired
+                 *
+                 * Expired sengaja diletakkan paling bawah.
+                 */
+                $priorityA = $a->priority;
+                $priorityB = $b->priority;
+
+                $sortA = $priorityA === 0 ? 99 : $priorityA;
+                $sortB = $priorityB === 0 ? 99 : $priorityB;
+
+                if ($sortA !== $sortB) {
+                    return $sortA <=> $sortB;
+                }
+
+                /*
+                 * Kalau priority sama,
+                 * makanan dengan sisa hari lebih sedikit
+                 * ditampilkan lebih dahulu.
+                 */
+                $daysA = $a->days_remaining ?? PHP_INT_MAX;
+                $daysB = $b->days_remaining ?? PHP_INT_MAX;
+
+                if ($daysA !== $daysB) {
+                    return $daysA <=> $daysB;
+                }
+
+                /*
+                 * Kalau semuanya sama,
+                 * urut berdasarkan nama.
+                 */
+                return strcasecmp($a->name, $b->name);
+            })
+            ->values();
 
         return view('foods.index', [
             'foods' => $foods,
@@ -71,7 +110,6 @@ class FoodController extends Controller
             'purchase_date' => ['required', 'date'],
             'shelf_life_days' => ['required', 'integer', 'min:1', 'max:3650'],
             'category' => ['required', 'string', 'max:50'],
-            'notes' => ['nullable', 'string', 'max:1000'],
         ], [
             'name.required' => 'Nama makanan wajib diisi.',
             'quantity.required' => 'Jumlah wajib diisi.',

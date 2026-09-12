@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="id">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -165,11 +166,8 @@
             font-weight: 700;
         }
 
-        /*
-         * TABLE
-         * Tidak ada horizontal scroll.
-         * Vertical scroll halaman tetap normal.
-         */
+        /* TABLE */
+
         .panel {
             width: 100%;
             overflow-x: hidden;
@@ -191,7 +189,7 @@
 
         th,
         td {
-            padding: 10px 10px;
+            padding: 10px 9px;
             border-bottom: 1px solid #e7f1eb;
             text-align: left;
             font-weight: 700;
@@ -214,7 +212,7 @@
         }
 
         /*
-         * Lebar kolom total = 100%
+         * Total lebar kolom = 100%
          */
         th:nth-child(1),
         td:nth-child(1) {
@@ -228,22 +226,22 @@
 
         th:nth-child(3),
         td:nth-child(3) {
-            width: 9%;
+            width: 8%;
         }
 
         th:nth-child(4),
         td:nth-child(4) {
-            width: 9%;
+            width: 8%;
         }
 
         th:nth-child(5),
         td:nth-child(5) {
-            width: 9%;
+            width: 8%;
         }
 
         th:nth-child(6),
         td:nth-child(6) {
-            width: 16%;
+            width: 14%;
         }
 
         th:nth-child(7),
@@ -253,17 +251,21 @@
 
         th:nth-child(8),
         td:nth-child(8) {
-            width: 20%;
+            width: 8%;
         }
 
         th:nth-child(9),
         td:nth-child(9) {
+            width: 17%;
+        }
+
+        th:nth-child(10),
+        td:nth-child(10) {
             width: 10%;
         }
 
-        /*
-         * STATUS
-         */
+        /* STATUS */
+
         .status-badge {
             display: inline-flex;
             align-items: center;
@@ -271,7 +273,7 @@
             width: 100%;
             max-width: 150px;
             box-sizing: border-box;
-            padding: 6px 8px;
+            padding: 6px 7px;
             border-radius: 999px;
             font-size: 10px;
             font-weight: 700;
@@ -318,10 +320,56 @@
             color: #647067;
         }
 
-        /*
-         * CATATAN
-         * Teks sekarang bisa turun ke beberapa baris.
-         */
+        /* PRIORITY */
+
+        .priority-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 90px;
+            box-sizing: border-box;
+            padding: 6px 7px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 700;
+            line-height: 1.2;
+            text-align: center;
+            white-space: normal;
+        }
+
+        .priority-badge.high {
+            border: 1px solid #fecaca;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .priority-badge.medium {
+            border: 1px solid #fde68a;
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .priority-badge.low {
+            border: 1px solid #bbf7d0;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .priority-badge.expired {
+            border: 1px solid #d1d5db;
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .priority-badge.unknown {
+            border: 1px solid #d1d5db;
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+
+        /* INSIGHT */
+
         .note-cell {
             max-width: none;
             white-space: normal;
@@ -330,11 +378,13 @@
             word-break: break-word;
             overflow-wrap: anywhere;
             line-height: 1.5;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            font-weight: 600;
         }
 
-        /*
-         * AKSI
-         */
+        /* ACTION */
+
         .row-actions {
             display: flex;
             gap: 6px;
@@ -387,8 +437,8 @@
         }
 
         /*
-         * Sticky action DIHAPUS.
-         * Jadi kolom Aksi tidak lagi menutupi Catatan.
+         * Sticky action sudah dimatikan supaya
+         * kolom Insight tidak tertutup.
          */
         th.sticky-action,
         td.sticky-action {
@@ -412,9 +462,8 @@
             color: #647067;
         }
 
-        /*
-         * MODAL DELETE
-         */
+        /* MODAL DELETE */
+
         .modal-backdrop {
             position: fixed;
             inset: 0;
@@ -486,10 +535,9 @@
             color: #ffffff;
         }
 
-        /*
-         * MOBILE
-         */
-        @media (max-width: 900px) {
+        /* MOBILE */
+
+        @media (max-width: 1000px) {
             main {
                 padding: 24px 12px;
             }
@@ -507,9 +555,9 @@
                 padding: 8px 7px;
             }
 
-            .status-badge {
+            .status-badge,
+            .priority-badge {
                 font-size: 9px;
-                max-width: 130px;
             }
 
             .action-link,
@@ -519,9 +567,13 @@
                 min-height: 34px;
                 font-size: 14px;
             }
+
+            .note-cell {
+                font-size: 11px;
+            }
         }
 
-        @media (max-width: 640px) {
+        @media (max-width: 700px) {
             main {
                 padding: 16px 8px;
             }
@@ -552,12 +604,17 @@
                 padding: 7px 5px;
             }
 
-            .status-badge {
+            .status-badge,
+            .priority-badge {
                 font-size: 8px;
                 padding: 5px 4px;
             }
 
             .days-remaining {
+                font-size: 9px;
+            }
+
+            .note-cell {
                 font-size: 9px;
             }
 
@@ -577,6 +634,7 @@
 </head>
 
 <body>
+
     <main>
         <div class="page">
 
@@ -591,6 +649,7 @@
             </div>
 
             <header>
+
                 <div>
                     <h1>Daftar Makanan</h1>
 
@@ -600,6 +659,7 @@
                 </div>
 
                 <div class="actions">
+
                     <a
                         class="button"
                         href="{{ route('foods.create') }}"
@@ -613,15 +673,19 @@
                     >
                         Tes koneksi database
                     </a>
+
                 </div>
+
             </header>
 
             <hr class="divider">
 
             @if (session('success'))
+
                 <p class="alert">
                     {{ session('success') }}
                 </p>
+
             @endif
 
             <section class="panel">
@@ -635,6 +699,7 @@
                 @else
 
                     <table>
+
                         <thead>
                             <tr>
                                 <th>Nama</th>
@@ -643,9 +708,12 @@
                                 <th>Masa Simpan</th>
                                 <th>Batas Simpan</th>
                                 <th>Status</th>
+                                <th>Prioritas</th>
                                 <th>Kategori</th>
-                                <th>Catatan</th>
-                                <th class="sticky-action">Aksi</th>
+                                <th>Insight FRESHBACK</th>
+                                <th class="sticky-action">
+                                    Aksi
+                                </th>
                             </tr>
                         </thead>
 
@@ -677,7 +745,9 @@
 
                                     <td>
 
-                                        <span class="status-badge {{ $food->status_key }}">
+                                        <span
+                                            class="status-badge {{ $food->status_key }}"
+                                        >
                                             {{ $food->status }}
                                         </span>
 
@@ -713,6 +783,16 @@
                                     </td>
 
                                     <td>
+
+                                        <span
+                                            class="priority-badge {{ $food->priority_key }}"
+                                        >
+                                            {{ $food->priority_label }}
+                                        </span>
+
+                                    </td>
+
+                                    <td>
                                         {{ $food->category ?: '-' }}
                                     </td>
 
@@ -720,7 +800,7 @@
                                         class="note-cell"
                                         title="{{ $food->auto_note }}"
                                     >
-                                        {{ $food->auto_note ?: '-' }}
+                                        {{ $food->auto_note }}
                                     </td>
 
                                     <td class="sticky-action">
@@ -756,15 +836,18 @@
                             @endforeach
 
                         </tbody>
+
                     </table>
 
                 @endif
 
             </section>
+
         </div>
     </main>
 
-    <!-- Modal Hapus -->
+    <!-- MODAL HAPUS -->
+
     <div
         class="modal-backdrop"
         data-delete-modal
@@ -793,6 +876,7 @@
                 method="POST"
                 data-delete-form
             >
+
                 @csrf
                 @method('DELETE')
 
@@ -823,8 +907,12 @@
     <script>
         const modal = document.querySelector('[data-delete-modal]');
         const deleteForm = document.querySelector('[data-delete-form]');
-        const deleteFoodName = document.querySelector('[data-delete-food-name]');
-        const closeDeleteButton = document.querySelector('[data-close-delete]');
+        const deleteFoodName = document.querySelector(
+            '[data-delete-food-name]'
+        );
+        const closeDeleteButton = document.querySelector(
+            '[data-close-delete]'
+        );
 
         function openDeleteModal(button) {
             deleteForm.action = button.dataset.deleteAction;
@@ -857,7 +945,10 @@
 
             });
 
-        closeDeleteButton.addEventListener('click', closeDeleteModal);
+        closeDeleteButton.addEventListener(
+            'click',
+            closeDeleteModal
+        );
 
         modal.addEventListener('click', (event) => {
 
@@ -875,5 +966,6 @@
 
         });
     </script>
+
 </body>
 </html>

@@ -98,9 +98,64 @@ class Food extends Model
     }
 
     /**
-     * Membuat insight/catatan otomatis berdasarkan kondisi makanan.
+     * Menentukan priority makanan.
      *
-     * Catatan ini tidak berasal dari input user.
+     * 0 = Expired
+     * 1 = Tinggi
+     * 2 = Sedang
+     * 3 = Rendah
+     */
+    public function getPriorityAttribute(): int
+    {
+        if ($this->days_remaining === null) {
+            return 0;
+        }
+
+        if ($this->days_remaining < 0) {
+            return 0;
+        }
+
+        if ($this->days_remaining <= 2) {
+            return 1;
+        }
+
+        if ($this->days_remaining <= 5) {
+            return 2;
+        }
+
+        return 3;
+    }
+
+    /**
+     * Label priority yang mudah dibaca user.
+     */
+    public function getPriorityLabelAttribute(): string
+    {
+        return match ($this->priority) {
+            0 => 'Expired',
+            1 => 'Tinggi',
+            2 => 'Sedang',
+            3 => 'Rendah',
+            default => 'Tidak Diketahui',
+        };
+    }
+
+    /**
+     * Class CSS untuk priority.
+     */
+    public function getPriorityKeyAttribute(): string
+    {
+        return match ($this->priority) {
+            0 => 'expired',
+            1 => 'high',
+            2 => 'medium',
+            3 => 'low',
+            default => 'unknown',
+        };
+    }
+
+    /**
+     * Insight/catatan otomatis.
      */
     public function getAutoNoteAttribute(): string
     {
