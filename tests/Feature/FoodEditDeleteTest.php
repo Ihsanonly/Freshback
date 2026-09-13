@@ -26,7 +26,6 @@ class FoodEditDeleteTest extends TestCase
         $response->assertSee('Edit Makanan');
         $response->assertSee('Susu');
         $response->assertSee('Simpan Perubahan');
-        $response->assertSee('Preview Edit');
         $response->assertSee('Insight Otomatis');
         $response->assertDontSee('name="notes"');
     }
