@@ -18,7 +18,6 @@ class FoodEditDeleteTest extends TestCase
             'purchase_date' => '2026-09-02',
             'shelf_life_days' => 4,
             'category' => 'Minuman',
-            'notes' => 'Simpan di kulkas',
         ]);
 
         $response = $this->get(route('foods.edit', $food));
@@ -28,9 +27,11 @@ class FoodEditDeleteTest extends TestCase
         $response->assertSee('Susu');
         $response->assertSee('Simpan Perubahan');
         $response->assertSee('Preview Edit');
+        $response->assertSee('Insight Otomatis');
+        $response->assertDontSee('name="notes"');
     }
 
-    public function test_food_can_be_updated(): void
+    public function test_food_can_be_updated_without_manual_notes(): void
     {
         $food = Food::create([
             'name' => 'Susu',
@@ -38,7 +39,6 @@ class FoodEditDeleteTest extends TestCase
             'purchase_date' => '2026-09-02',
             'shelf_life_days' => 4,
             'category' => 'Minuman',
-            'notes' => 'Simpan di kulkas',
         ]);
 
         $response = $this->put(route('foods.update', $food), [
@@ -47,7 +47,6 @@ class FoodEditDeleteTest extends TestCase
             'purchase_date' => '2026-09-06',
             'shelf_life_days' => 5,
             'category' => 'Dairy',
-            'notes' => 'Sudah dibuka',
         ]);
 
         $response->assertRedirect(route('foods.index'));
@@ -59,7 +58,6 @@ class FoodEditDeleteTest extends TestCase
             'quantity' => '2',
             'shelf_life_days' => 5,
             'category' => 'Dairy',
-            'notes' => 'Sudah dibuka',
         ]);
 
         $this->assertSame(
@@ -76,7 +74,6 @@ class FoodEditDeleteTest extends TestCase
             'purchase_date' => '2026-08-30',
             'shelf_life_days' => 2,
             'category' => 'Sayur',
-            'notes' => 'Cuci sebelum masak',
         ]);
 
         $response = $this->delete(route('foods.destroy', $food));
@@ -98,7 +95,6 @@ class FoodEditDeleteTest extends TestCase
             'purchase_date' => '2026-08-30',
             'shelf_life_days' => 2,
             'category' => 'Sayur',
-            'notes' => 'Cuci sebelum masak',
         ]);
 
         $response = $this->from(route('foods.edit', $food))->put(route('foods.update', $food), [
@@ -107,7 +103,6 @@ class FoodEditDeleteTest extends TestCase
             'purchase_date' => '',
             'shelf_life_days' => '',
             'category' => '',
-            'notes' => '',
         ]);
 
         $response->assertRedirect(route('foods.edit', $food));
