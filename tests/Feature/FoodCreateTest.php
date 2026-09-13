@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Food;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -20,10 +21,11 @@ class FoodCreateTest extends TestCase
         $response->assertSee('Tanggal Dibeli');
         $response->assertSee('Masa Simpan');
         $response->assertSee('Kategori');
-        $response->assertSee('Catatan');
+        $response->assertSee('Insight Otomatis');
+        $response->assertDontSee('name="notes"');
     }
 
-    public function test_food_can_be_stored(): void
+    public function test_food_can_be_stored_without_manual_notes(): void
     {
         $response = $this->post('/foods', [
             'name' => 'Yogurt',
@@ -31,24 +33,18 @@ class FoodCreateTest extends TestCase
             'purchase_date' => '2026-09-06',
             'shelf_life_days' => 10,
             'category' => 'Dairy',
-            'notes' => 'Untuk camilan',
         ]);
 
         $response->assertRedirect(route('foods.index'));
         $response->assertSessionHas('success', 'Makanan berhasil ditambahkan.');
 
-        $this->assertDatabaseHas('foods', [
-            'name' => 'Yogurt',
-            'quantity' => '2',
-            'shelf_life_days' => 10,
-            'category' => 'Dairy',
-            'notes' => 'Untuk camilan',
-        ]);
+        $food = Food::where('name', 'Yogurt')->first();
 
-        $this->assertSame(
-            '2026-09-06',
-            \App\Models\Food::where('name', 'Yogurt')->first()->purchase_date->toDateString()
-        );
+        $this->assertNotNull($food);
+        $this->assertSame('2', $food->quantity);
+        $this->assertSame(10, $food->shelf_life_days);
+        $this->assertSame('Dairy', $food->category);
+        $this->assertSame('2026-09-06', $food->purchase_date->toDateString());
     }
 
     public function test_store_food_requires_valid_input(): void
@@ -59,7 +55,6 @@ class FoodCreateTest extends TestCase
             'purchase_date' => '',
             'shelf_life_days' => '',
             'category' => '',
-            'notes' => '',
         ]);
 
         $response->assertRedirect('/foods/create');
