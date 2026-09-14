@@ -35,16 +35,18 @@ class DashboardTest extends TestCase
             $response = $this->get('/');
 
             $response->assertOk();
-            $response->assertSee('Dashboard');
+            $response->assertSee('Dashboard FRESHBACK');
             $response->assertSee('Total makanan');
             $response->assertSee('Prioritas tinggi');
+            $response->assertSee('Prioritas sedang');
             $response->assertSee('Masih aman');
             $response->assertSee('Sudah lewat masa simpan');
             $response->assertSee('Susu');
             $response->assertSee('Milo');
-            $response->assertSee('🔥 Prioritas untuk digunakan');
+            $response->assertSee('Prioritas untuk digunakan');
             $response->assertSee('+ Tambah Makanan');
             $response->assertSee('Lihat Semua');
+            $response->assertSee('Insight FRESHBACK');
         } finally {
             Carbon::setTestNow();
         }
