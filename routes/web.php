@@ -1,13 +1,12 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FoodController;
 use App\Models\Food;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
 Route::get('/foods/create', [FoodController::class, 'create'])->name('foods.create');
 Route::post('/foods', [FoodController::class, 'store'])->name('foods.store');
