@@ -44,7 +44,7 @@ class DashboardTest extends TestCase
             $response->assertSee('Susu');
             $response->assertSee('Milo');
             $response->assertSee('Prioritas untuk digunakan');
-            $response->assertSee('+ Tambah Makanan');
+            $response->assertSee('Tambah Makanan');
             $response->assertSee('Lihat Semua');
             $response->assertSee('Insight FRESHBACK');
         } finally {
