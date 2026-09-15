@@ -60,10 +60,14 @@ class RecipeTest extends TestCase
         $response->assertSee('cara membuat mie telur kecap');
 
         Http::assertSent(function ($request) {
-            return $request->url() === 'https://api.ferdev.me/ai/gemini'
-                && $request->method() === 'GET'
-                && $request->urlWithQuery([]) !== ''
-                && $request['prompt'] === null;
+            $query = parse_url($request->url(), PHP_URL_QUERY);
+            parse_str(is_string($query) ? $query : '', $params);
+
+            return $request->method() === 'GET'
+                && parse_url($request->url(), PHP_URL_PATH) === '/ai/gemini'
+                && ($params['apikey'] ?? null) === 'test-key'
+                && isset($params['prompt'])
+                && str_contains($params['prompt'], '2 telur, mie, kecap');
         });
     }
 
