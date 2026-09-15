@@ -2,11 +2,15 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FoodController;
+use App\Http\Controllers\RecipeController;
 use App\Models\Food;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+Route::get('/recipes', [RecipeController::class, 'index'])->name('recipes.index');
+Route::post('/recipes', [RecipeController::class, 'generate'])->name('recipes.generate');
 
 Route::get('/foods/create', [FoodController::class, 'create'])->name('foods.create');
 Route::post('/foods', [FoodController::class, 'store'])->name('foods.store');
