@@ -20,35 +20,34 @@ class RecipeTest extends TestCase
         $response->assertSee('Cari Ide Resep');
     }
 
-    public function test_recipe_generation_reads_json_from_ai_api(): void
+    public function test_recipe_generation_reads_ferdev_message_json(): void
     {
         config([
-            'ai.url' => 'https://example.test/v1/chat/completions',
+            'ai.url' => 'https://api.ferdev.me/ai/gemini',
             'ai.key' => 'test-key',
-            'ai.model' => 'test-model',
+            'ai.timeout' => 45,
         ]);
 
-        Http::fake([
-            'https://example.test/*' => Http::response([
-                'choices' => [
-                    [
-                        'message' => [
-                            'content' => json_encode([
-                                'recipes' => [
-                                    [
-                                        'name' => 'Mie Telur Kecap',
-                                        'reason' => 'Memakai bahan yang tersedia.',
-                                        'time_minutes' => 10,
-                                        'difficulty' => 'Mudah',
-                                        'ingredients' => ['Mie', '2 telur', 'Kecap'],
-                                        'steps' => ['Rebus mie.', 'Masak telur.', 'Campurkan semua bahan.'],
-                                        'youtube_search_query' => 'cara membuat mie telur kecap',
-                                    ],
-                                ],
-                            ], JSON_UNESCAPED_UNICODE),
-                        ],
-                    ],
+        $aiJson = json_encode([
+            'recipes' => [
+                [
+                    'name' => 'Mie Telur Kecap',
+                    'reason' => 'Memakai bahan yang tersedia.',
+                    'time_minutes' => 10,
+                    'difficulty' => 'Mudah',
+                    'ingredients' => ['Mie', '2 telur', 'Kecap'],
+                    'steps' => ['Rebus mie.', 'Masak telur.', 'Campurkan semua bahan.'],
+                    'youtube_search_query' => 'cara membuat mie telur kecap',
                 ],
+            ],
+        ], JSON_UNESCAPED_UNICODE);
+
+        Http::fake([
+            'https://api.ferdev.me/*' => Http::response([
+                'success' => true,
+                'status' => 200,
+                'author' => 'Feri',
+                'message' => $aiJson,
             ], 200),
         ]);
 
@@ -61,9 +60,10 @@ class RecipeTest extends TestCase
         $response->assertSee('cara membuat mie telur kecap');
 
         Http::assertSent(function ($request) {
-            return $request->url() === 'https://example.test/v1/chat/completions'
-                && $request->hasHeader('Authorization', 'Bearer test-key')
-                && $request['model'] === 'test-model';
+            return $request->url() === 'https://api.ferdev.me/ai/gemini'
+                && $request->method() === 'GET'
+                && $request->urlWithQuery([]) !== ''
+                && $request['prompt'] === null;
         });
     }
 
