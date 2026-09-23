@@ -4,64 +4,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Tes Database FRESHBACK</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f6fbf8;
-            color: #17231d;
-        }
-
-        main {
-            max-width: 720px;
-            margin: 64px auto;
-            padding: 32px;
-            background: #ffffff;
-            border: 1px solid #dcebe2;
-            border-radius: 12px;
-            box-shadow: 0 12px 28px rgba(22, 101, 52, 0.08);
-        }
-
-        h1 {
-            margin-top: 0;
-            color: #166534;
-        }
-
-        .status {
-            display: inline-block;
-            padding: 8px 12px;
-            border-radius: 999px;
-            background: {{ $isSuccess ? '#dcfce7' : '#fee2e2' }};
-            color: {{ $isSuccess ? '#166534' : '#991b1b' }};
-            font-weight: 700;
-        }
-
-        dl {
-            display: grid;
-            grid-template-columns: 180px 1fr;
-            gap: 12px;
-            margin-top: 24px;
-        }
-
-        dt {
-            font-weight: 700;
-        }
-
-        dd {
-            margin: 0;
-        }
-
-        code {
-            background: #eef7f0;
-            border-radius: 6px;
-            padding: 2px 6px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <script>(function(){try{var t=localStorage.getItem('theme');if(!t){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 </head>
 <body>
-    <main>
+    <button class="theme-toggle theme-toggle--fixed" type="button" aria-label="Ganti mode tampilan" title="Ganti mode tampilan"><span aria-hidden="true">&#9789;</span></button>
+
+    <main class="shell shell-sm">
         <h1>Tes Database FRESHBACK</h1>
-        <p class="status">{{ $message }}</p>
+        <p class="status {{ $isSuccess ? 'status-ok' : 'status-fail' }}">{{ $message }}</p>
 
         <dl>
             <dt>Database</dt>
@@ -77,5 +28,28 @@
             <dd>{{ $totalFoods }}</dd>
         </dl>
     </main>
+    <script>
+    (function () {
+        var root = document.documentElement;
+
+        function paint(btn) {
+            var dark = root.getAttribute('data-theme') === 'dark';
+            btn.innerHTML = '<span aria-hidden="true">' + (dark ? '\u2600\uFE0F' : '\uD83C\uDF19') + '</span>';
+            var label = dark ? 'Aktifkan mode terang' : 'Aktifkan mode gelap';
+            btn.setAttribute('aria-label', label);
+            btn.setAttribute('title', label);
+        }
+
+        document.querySelectorAll('.theme-toggle').forEach(function (btn) {
+            paint(btn);
+            btn.addEventListener('click', function () {
+                var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                root.setAttribute('data-theme', next);
+                try { localStorage.setItem('theme', next); } catch (e) {}
+                document.querySelectorAll('.theme-toggle').forEach(paint);
+            });
+        });
+    })();
+    </script>
 </body>
 </html>

@@ -4,48 +4,41 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>FRESHBACK</title>
-    <style>
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: grid;
-            place-items: center;
-            font-family: Arial, sans-serif;
-            background: #f6fbf8;
-            color: #17231d;
-        }
-
-        main {
-            width: min(720px, calc(100% - 32px));
-            padding: 32px;
-            background: #ffffff;
-            border: 1px solid #dcebe2;
-            border-radius: 12px;
-            box-shadow: 0 12px 28px rgba(22, 101, 52, 0.08);
-        }
-
-        h1 {
-            margin: 0 0 12px;
-            color: #166534;
-        }
-
-        p {
-            margin: 0 0 12px;
-        }
-
-        a {
-            color: #166534;
-            font-weight: 700;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <script>(function(){try{var t=localStorage.getItem('theme');if(!t){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 </head>
 <body>
-    <main>
+    <button class="theme-toggle theme-toggle--fixed" type="button" aria-label="Ganti mode tampilan" title="Ganti mode tampilan"><span aria-hidden="true">&#9789;</span></button>
+
+    <main class="shell shell-sm">
         <h1>FRESHBACK</h1>
         <p>Project Laravel sudah aktif.</p>
         <p><a href="{{ route('foods.index') }}">Daftar makanan</a></p>
         <p><a href="{{ route('recipes.index') }}">Resep AI</a></p>
         <p><a href="{{ url('/test-db') }}">Tes koneksi database</a></p>
     </main>
+    <script>
+    (function () {
+        var root = document.documentElement;
+
+        function paint(btn) {
+            var dark = root.getAttribute('data-theme') === 'dark';
+            btn.innerHTML = '<span aria-hidden="true">' + (dark ? '\u2600\uFE0F' : '\uD83C\uDF19') + '</span>';
+            var label = dark ? 'Aktifkan mode terang' : 'Aktifkan mode gelap';
+            btn.setAttribute('aria-label', label);
+            btn.setAttribute('title', label);
+        }
+
+        document.querySelectorAll('.theme-toggle').forEach(function (btn) {
+            paint(btn);
+            btn.addEventListener('click', function () {
+                var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                root.setAttribute('data-theme', next);
+                try { localStorage.setItem('theme', next); } catch (e) {}
+                document.querySelectorAll('.theme-toggle').forEach(paint);
+            });
+        });
+    })();
+    </script>
 </body>
 </html>
