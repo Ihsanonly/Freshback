@@ -44,6 +44,7 @@
         <h1>FRESHBACK</h1>
         <p>Project Laravel sudah aktif.</p>
         <p><a href="{{ route('foods.index') }}">Daftar makanan</a></p>
+        <p><a href="{{ route('recipes.index') }}">Resep AI</a></p>
         <p><a href="{{ url('/test-db') }}">Tes koneksi database</a></p>
     </main>
 </body>

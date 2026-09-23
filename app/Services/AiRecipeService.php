@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 use RuntimeException;
 
@@ -11,49 +12,57 @@ class AiRecipeService
     {
         $url = config('ai.url');
         $key = config('ai.key');
+        $model = config('ai.model');
         $timeout = config('ai.timeout', 45);
 
         if (!$url) {
-            throw new RuntimeException('AI_API_URL belum diatur di file .env.');
+            throw new RuntimeException('Konfigurasi layanan AI belum lengkap. Silakan hubungi pengelola aplikasi.');
         }
 
         if (!$key) {
-            throw new RuntimeException('AI_API_KEY belum diatur di file .env.');
+            throw new RuntimeException('Kunci akses layanan AI belum diatur. Silakan hubungi pengelola aplikasi.');
+        }
+
+        if (!$model) {
+            throw new RuntimeException('Model layanan AI belum diatur. Silakan hubungi pengelola aplikasi.');
         }
 
         $prompt = $this->buildPrompt($ingredients);
 
-        $response = Http::timeout($timeout)
-            ->acceptJson()
-            ->get($url, [
-                'prompt' => $prompt,
-                'apikey' => $key,
-            ]);
+        try {
+            $response = Http::timeout($timeout)
+                ->acceptJson()
+                ->withToken($key)
+                ->post($url, [
+                    'model' => $model,
+                    'messages' => [
+                        ['role' => 'user', 'content' => $prompt],
+                    ],
+                ]);
+        } catch (ConnectionException) {
+            throw new RuntimeException('Layanan AI gagal dihubungi. Silakan coba lagi beberapa saat lagi.');
+        }
 
         if ($response->failed()) {
-            throw new RuntimeException(
-                'Ferdev API gagal (' . $response->status() . '): ' . $response->body()
-            );
+            throw new RuntimeException('Layanan AI sedang tidak dapat dihubungi. Silakan coba lagi nanti.');
         }
 
         $payload = $response->json();
 
-        if (!is_array($payload) || ($payload['success'] ?? false) !== true) {
-            throw new RuntimeException('Ferdev API mengembalikan response yang tidak berhasil.');
+        if (!is_array($payload)) {
+            throw new RuntimeException('Layanan AI mengembalikan data yang tidak dikenali.');
         }
 
-        $message = $payload['message'] ?? null;
+        $content = $payload['choices'][0]['message']['content'] ?? null;
 
-        if (is_array($message)) {
-            $recipesPayload = $message;
-        } elseif (is_string($message)) {
-            $recipesPayload = json_decode($this->cleanJson($message), true);
-        } else {
-            $recipesPayload = null;
+        if (!is_string($content) || trim($content) === '') {
+            throw new RuntimeException('Layanan AI tidak menghasilkan resep yang bisa dibaca. Silakan coba lagi.');
         }
+
+        $recipesPayload = json_decode($this->cleanJson($content), true);
 
         if (!is_array($recipesPayload) || !isset($recipesPayload['recipes']) || !is_array($recipesPayload['recipes'])) {
-            throw new RuntimeException('Ferdev mengembalikan format data resep yang tidak valid.');
+            throw new RuntimeException('Hasil resep dari layanan AI tidak valid. Silakan coba lagi.');
         }
 
         return [

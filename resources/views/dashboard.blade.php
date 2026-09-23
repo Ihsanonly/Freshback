@@ -769,7 +769,7 @@
 
             <div class="hero-actions">
                 <a class="button primary" href="{{ route('foods.create') }}">＋ Tambah Makanan</a>
-                <a class="button secondary" href="{{ route('foods.index') }}">Lihat Semua →</a>
+                <a class="button secondary" href="{{ route('recipes.index') }}">✨ Resep AI</a>
             </div>
         </header>
 
@@ -830,7 +830,6 @@
                             <p class="section-subtitle">Makanan yang paling dekat dengan batas masa simpan</p>
                         </div>
                     </div>
-                    <a class="section-link" href="{{ route('foods.index') }}">Semua →</a>
                 </div>
 
                 @if ($priorityFoods->isEmpty())
@@ -898,6 +897,10 @@
                     <a class="quick-link" href="{{ route('foods.index') }}">
                         <span>Kelola daftar makanan</span>
                         <span>→</span>
+                    </a>
+                    <a class="quick-link" href="{{ route('recipes.index') }}">
+                        <span>Buat resep AI</span>
+                        <span>✨</span>
                     </a>
                 </div>
             </aside>

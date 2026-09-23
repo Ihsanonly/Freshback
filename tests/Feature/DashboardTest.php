@@ -44,8 +44,9 @@ class DashboardTest extends TestCase
             $response->assertSee('Susu');
             $response->assertSee('Milo');
             $response->assertSee('Prioritas untuk digunakan');
-            $response->assertSee('Tambah Makanan');
-            $response->assertSee('Lihat Semua');
+            $response->assertSee('Tambah makanan baru');
+            $response->assertSee('Kelola daftar makanan');
+            $response->assertSee('Buat resep AI');
             $response->assertSee('Insight FRESHBACK');
         } finally {
             Carbon::setTestNow();
