@@ -10,13 +10,17 @@
 </head>
 <body>
     <main class="shell page-enter">
-        <div class="brand" aria-label="FRESHBACK">
-            <span class="brand-mark" aria-hidden="true">
-                <span></span>
-                <span></span>
-                <span></span>
-            </span>
-            <span>FRESHBACK</span>
+        <div class="brand">
+            @if (request()->routeIs('dashboard') || request()->is('/'))
+                <span class="brand-mark" aria-hidden="true">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+                <span>FRESHBACK</span>
+            @else
+                <a class="back" href="{{ route('dashboard') }}">Beranda</a>
+            @endif
         <button class="theme-toggle" type="button" aria-label="Ganti mode tampilan" title="Ganti mode tampilan"><span aria-hidden="true">&#9789;</span></button>
         </div>
 
@@ -164,6 +168,10 @@
                     <a class="quick-link" href="{{ route('recipes.index') }}">
                         <span>Buat resep AI</span>
                         <span>✨</span>
+                    </a>
+                    <a class="quick-link" href="{{ route('shopping.index') }}">
+                        <span>Daftar Belanja</span>
+                        <span>🛒</span>
                     </a>
                 </div>
             </aside>

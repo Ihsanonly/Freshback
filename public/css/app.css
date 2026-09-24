@@ -511,16 +511,57 @@ button:hover {
     border-color: var(--accent);
 }
 
-.text-link {
-    min-height: 40px;
-    display: inline-flex;
+/* Form pencarian di header halaman makanan */
+.search-form {
+    display: flex;
     align-items: center;
-    color: var(--accent-2);
-    font-weight: 700;
+    gap: 8px;
+    flex: 1 1 260px;
+    max-width: 330px;
+    min-height: 44px;
+    padding: 0 6px 0 14px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--card);
+    transition:
+        background-color 0.3s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
 }
 
-.text-link:hover {
-    color: var(--accent);
+.search-form:focus-within {
+    border-color: var(--accent);
+    box-shadow: var(--ring);
+}
+
+.search-form input[type="search"] {
+    flex: 1;
+    min-width: 0;
+    width: auto;
+    height: 40px;
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    font-size: 13.5px;
+    font-weight: 600;
+    outline: none;
+    box-shadow: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.search-form input[type="search"]:focus {
+    border: 0;
+    box-shadow: none;
+}
+
+.search-submit {
+    min-height: 34px;
+    padding: 0 14px;
+    border-radius: 9px;
+    font-size: 13px;
 }
 
 .back {
@@ -1644,6 +1685,169 @@ dd code {
     padding: 2px 7px;
     font-size: 13px;
     color: var(--text-2);
+}
+
+/* ------------------------------------------------------------
+   12b. Daftar Belanja (Smart Shopping List)
+   ------------------------------------------------------------ */
+.shop-form input {
+    min-height: 48px;
+}
+
+.shop-form button {
+    min-width: 170px;
+}
+
+.shop-empty-block {
+    margin-top: 18px;
+}
+
+.mini-title .badge {
+    margin-left: 6px;
+    vertical-align: middle;
+}
+
+.shop-empty {
+    padding: 12px 4px;
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.shop-list {
+    list-style: none;
+    margin: 0 0 4px;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+}
+
+.shop-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    border: 1px solid var(--line-soft);
+    border-radius: 12px;
+    background: var(--card);
+    transition:
+        background-color 0.3s ease,
+        border-color 0.25s ease;
+}
+
+.shop-item:hover {
+    border-color: var(--accent);
+}
+
+.shop-item form {
+    display: flex;
+    align-items: center;
+}
+
+.shop-check {
+    width: 26px;
+    height: 26px;
+    min-height: 26px;
+    padding: 0;
+    display: inline-grid;
+    place-items: center;
+    font-size: 13px;
+    font-weight: 800;
+    border-radius: 50%;
+    border: 2px solid var(--line);
+    background: transparent;
+    color: transparent;
+    box-shadow: none;
+    cursor: pointer;
+}
+
+.shop-check:hover {
+    background: transparent;
+    color: var(--accent-2);
+    border-color: var(--accent);
+    transform: none;
+    box-shadow: none;
+}
+
+.shop-item.is-bought .shop-check {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-contrast);
+}
+
+.shop-name {
+    flex: 1;
+    min-width: 0;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--text);
+    overflow-wrap: anywhere;
+    transition: color 0.3s ease;
+}
+
+.shop-item.is-bought .shop-name {
+    color: var(--text-muted);
+    font-weight: 600;
+    text-decoration: line-through;
+    text-decoration-color: var(--text-muted);
+}
+
+.shop-remove {
+    width: 34px;
+    min-width: 34px;
+    height: 34px;
+    min-height: 34px;
+    padding: 0;
+    display: inline-grid;
+    place-items: center;
+    font-size: 14px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    background: var(--danger-soft);
+    color: var(--danger-text);
+    box-shadow: none;
+    cursor: pointer;
+}
+
+.shop-remove:hover {
+    background: var(--danger-soft);
+    border-color: var(--danger);
+    color: var(--danger-text);
+    transform: translateY(-2px);
+    box-shadow: none;
+}
+
+/* Tombol "Masuk Daftar Belanja" di tabel makanan */
+.shop-inline {
+    margin-top: 8px;
+}
+
+.shop-add {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+    min-height: 27px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    background: var(--accent-soft);
+    color: var(--accent-2);
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1.25;
+    text-align: center;
+    white-space: normal;
+    box-shadow: none;
+    cursor: pointer;
+}
+
+.shop-add:hover {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent-2);
+    transform: translateY(-1px);
+    box-shadow: none;
 }
 
 /* ------------------------------------------------------------

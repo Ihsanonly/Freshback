@@ -36,6 +36,9 @@ class DashboardTest extends TestCase
 
             $response->assertOk();
             $response->assertSee('Dashboard FRESHBACK');
+            $response->assertSee('brand-mark', false);
+            $response->assertSee('<span>FRESHBACK</span>', false);
+            $response->assertDontSee('>Beranda<', false);
             $response->assertSee('Total makanan');
             $response->assertSee('Prioritas tinggi');
             $response->assertSee('Prioritas sedang');
@@ -47,6 +50,7 @@ class DashboardTest extends TestCase
             $response->assertSee('Tambah makanan baru');
             $response->assertSee('Kelola daftar makanan');
             $response->assertSee('Buat resep AI');
+            $response->assertSee('Daftar Belanja');
             $response->assertSee('Insight FRESHBACK');
         } finally {
             Carbon::setTestNow();

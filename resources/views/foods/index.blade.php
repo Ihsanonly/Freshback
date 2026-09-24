@@ -15,14 +15,17 @@
     <main class="shell-pad">
         <div class="page page--wide">
 
-            <div class="brand" aria-label="FRESHBACK">
-                <span class="brand-mark" aria-hidden="true">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </span>
-
-                <span>FRESHBACK</span>
+            <div class="brand">
+                @if (request()->routeIs('dashboard') || request()->is('/'))
+                    <span class="brand-mark" aria-hidden="true">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                    <span>FRESHBACK</span>
+                @else
+                    <a class="back" href="{{ route('dashboard') }}">Beranda</a>
+                @endif
         <button class="theme-toggle" type="button" aria-label="Ganti mode tampilan" title="Ganti mode tampilan"><span aria-hidden="true">&#9789;</span></button>
             </div>
 
@@ -38,19 +41,26 @@
 
                 <div class="actions">
 
-                    <a
-                        class="button"
-                        href="{{ route('foods.create') }}"
+                    <form
+                        class="search-form"
+                        method="GET"
+                        action="{{ route('foods.index') }}"
                     >
-                        + Tambah Makanan
-                    </a>
-
-                    <a
-                        class="text-link"
-                        href="{{ url('/test-db') }}"
-                    >
-                        Tes koneksi database
-                    </a>
+                        <input
+                            type="search"
+                            name="search"
+                            value="{{ $search }}"
+                            placeholder="Cari makanan..."
+                            aria-label="Cari makanan"
+                            maxlength="100"
+                        >
+                        <button
+                            class="search-submit"
+                            type="submit"
+                        >
+                            Cari
+                        </button>
+                    </form>
 
                 </div>
 
@@ -155,6 +165,33 @@
                                                 @endif
 
                                             </div>
+
+                                        @endif
+
+                                        @if ($food->status_key === 'expired')
+
+                                            <form
+                                                class="shop-inline"
+                                                method="POST"
+                                                action="{{ route('shopping.store') }}"
+                                            >
+                                                @csrf
+
+                                                <input
+                                                    type="hidden"
+                                                    name="item_name"
+                                                    value="{{ $food->name }}"
+                                                >
+
+                                                <button
+                                                    class="shop-add"
+                                                    type="submit"
+                                                    title="Masuk Daftar Belanja"
+                                                    aria-label="Masukkan {{ $food->name }} ke daftar belanja"
+                                                >
+                                                    🛒 Masuk Daftar Belanja
+                                                </button>
+                                            </form>
 
                                         @endif
 

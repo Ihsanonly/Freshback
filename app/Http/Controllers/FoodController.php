@@ -9,9 +9,21 @@ use Illuminate\View\View;
 
 class FoodController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $foods = Food::query()
+        /*
+         * Pencarian makanan via ?search= (LIKE, parameter binding aman).
+         * Kolom pada database adalah "name".
+         */
+        $search = trim((string) $request->query('search', ''));
+
+        $query = Food::query();
+
+        if ($search !== '') {
+            $query->where('name', 'like', '%' . $search . '%');
+        }
+
+        $foods = $query
             ->orderByDesc('purchase_date')
             ->orderBy('name')
             ->get()
@@ -57,6 +69,7 @@ class FoodController extends Controller
 
         return view('foods.index', [
             'foods' => $foods,
+            'search' => $search,
         ]);
     }
 
